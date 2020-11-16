@@ -1,6 +1,5 @@
 from sklearn.preprocessing import MinMaxScaler
 import pandas
-import matplotlib.pyplot as plt
 from utilities import create_dataset
 import numpy
 from keras.models import Sequential
@@ -13,8 +12,7 @@ from sklearn.metrics import mean_squared_error
 def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_squared_error', optimizer='adam' ): 
 
     dataset = pandas.read_csv(file_name, usecols=[1], engine='python')
-    plt.plot(dataset)
-    plt.show()
+
 
     # normalize the dataset
     scaler = MinMaxScaler(feature_range=(0, 1))
@@ -34,14 +32,21 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     testX = numpy.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
     
     model = Sequential()
-    model.add(LSTM(number_neurons, input_shape=(look_back, 1)))
+    model.add(
+        LSTM(
+            number_neurons, 
+            input_shape=(look_back, 1), 
+
+        ))
     model.add(Dense(1))
     model.add(LSTM(number_neurons))
     model.compile(loss=loss, optimizer=optimizer)
     model.fit(trainX, trainY, epochs=epochs, batch_size=batch_size, verbose=2)
+
     # make predictions
     trainPredict = model.predict(trainX)
     testPredict = model.predict(testX)
+
     # invert predictions
     trainPredict = scaler.inverse_transform(trainPredict)
     trainY = scaler.inverse_transform([trainY])
@@ -53,6 +58,7 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     testScore = math.sqrt(mean_squared_error(testY[0], testPredict[:,0]))
     print('Test Score: %.2f RMSE' % (testScore))
     # shift train predictions for plotting
+    
     trainPredictPlot = numpy.empty_like(dataset)
     trainPredictPlot[:, :] = numpy.nan
     trainPredictPlot[look_back:len(trainPredict)+look_back, :] = trainPredict
@@ -60,5 +66,5 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     testPredictPlot = numpy.empty_like(dataset)
     testPredictPlot[:, :] = numpy.nan
     testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
-    # plot baseline and predictions
 
+    return (trainScore, testScore)
