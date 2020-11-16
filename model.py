@@ -35,9 +35,7 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     scaler = MinMaxScaler(feature_range=(0, 1))
     dataset = scaler.fit_transform(dataset)
     # split into train and test sets
-    train_size = int(len(dataset) * 0.67)
-    test_size = len(dataset) - train_size
-    train, test = dataset[0:train_size,:], dataset[train_size:len(dataset),:]
+
     # reshape into X=t and Y=t+1
     look_back = 3
     trainX, trainY = create_dataset(train, look_back)
@@ -47,10 +45,10 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     testX = numpy.reshape(testX, (testX.shape[0], testX.shape[1], 1))
     # create and fit the LSTM network
     model = Sequential()
-    model.add(LSTM(4, input_shape=(look_back, 1)))
+    model.add(LSTM(number_neurons, input_shape=(look_back, 1)))
     model.add(Dense(1))
-    model.compile(loss='mean_squared_error', optimizer='adam')
-    model.fit(trainX, trainY, epochs=100, batch_size=1, verbose=2)
+    model.compile(loss=loss, optimizer=optimizer)
+    model.fit(trainX, trainY, epochs=epochs, batch_size=batch_size, verbose=2)
     # make predictions
     trainPredict = model.predict(trainX)
     testPredict = model.predict(testX)
