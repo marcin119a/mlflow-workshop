@@ -4,4 +4,4 @@ entry_points:
     main:
         parameters:
             file: {type: string, defalut: 'airline-passengers.csv'}
-        command: "python train.py {alpha} {l1_ratio}"
+        command: "python train.py {file}"

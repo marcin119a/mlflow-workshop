@@ -7,6 +7,8 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 import math
+from sklearn.metrics import mean_squared_error
+
 
 def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_squared_error', optimizer='adam' ): 
 
