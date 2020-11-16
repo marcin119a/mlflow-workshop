@@ -3,5 +3,12 @@ name: tutorial
 entry_points:
     main:
         parameters:
+            file_name: string
+            number_neurons: {type:integer, default:100},
+            epochs: {type: integer, default: 100}
+            batch_size:  {type:integer, default: 30} 
+            loss: {type: string, default: 'mean_squared_error'}
+            optimizer: {type:string, default: 'adam'}
             file: {type: string, defalut: 'airline-passengers.csv'}
-        command: "python train.py {file}"
+        command: "python train.py {file_name} {number_neurons} {epochs} {batch_size}
+            {loss} {optimizer} " 
