@@ -73,4 +73,4 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     testPredictPlot[:, :] = numpy.nan
     testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
 
-    return (trainScore, testScore)
+    return (model, trainScore, testScore)
