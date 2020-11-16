@@ -4,7 +4,7 @@ entry_points:
     main:
         parameters:
             file_name: string
-            number_neurons: {type:integer, default:100},
+            number_neurons: {type:integer, default:100}
             epochs: {type: integer, default: 100}
             batch_size:  {type:integer, default: 30} 
             loss: {type: string, default: 'mean_squared_error'}
