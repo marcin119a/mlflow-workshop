@@ -8,7 +8,7 @@ from keras.layers import Dense
 from keras.layers import LSTM
 import math
 
-def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_squared_error', ): 
+def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_squared_error', optimizer='adam' ): 
 
     dataset = pandas.read_csv(file_name, usecols=[1], engine='python')
     plt.plot(dataset)
@@ -35,7 +35,7 @@ def model(file_name, number_neurons, epochs=100, batch_size=1, loss='mean_square
     model.add(LSTM(number_neurons, input_shape=(look_back, 1)))
     model.add(Dense(1))
     model.add(LSTM(number_neurons))
-    model.compile(loss='mean_squared_error', optimizer='adam')
+    model.compile(loss=loss, optimizer=optimizer)
     model.fit(trainX, trainY, epochs=epochs, batch_size=batch_size, verbose=2)
     # make predictions
     trainPredict = model.predict(trainX)
